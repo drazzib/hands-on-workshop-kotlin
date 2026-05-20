@@ -26,16 +26,14 @@ jobs:
       - name: Install PNPM
         uses: pnpm/action-setup@v6
         with:
-          cache: 'true'
-          cache_dependency_path: ./slides/pnpm-lock.yaml
-          version: 10
-          run_install: |
-            - cwd: ./slides
+          package_json_file: slides/package.json
 
-      - name: Setup NodeJS Runtime
+      - name: Setup NodeJS
         uses: actions/setup-node@v6
         with:
-          node-version: "lts/*"
+          node-version-file: slides/.nvmrc
+          cache: pnpm
+          cache-dependency-path: slides/pnpm-lock.yaml
 
       - name: Install dependencies
         working-directory: ./slides
