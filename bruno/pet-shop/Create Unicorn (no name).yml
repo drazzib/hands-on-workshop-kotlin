@@ -1,0 +1,21 @@
+info:
+  name: Create Unicorn (no name)
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: http://localhost:8080/api/pets
+  body:
+    type: json
+    data: |-
+      {
+        "kind": "UNICORN"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

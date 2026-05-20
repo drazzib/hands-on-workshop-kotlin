@@ -1,0 +1,15 @@
+spring:
+  application.name: pet-shop
+  flyway:
+    enabled: true
+    url: jdbc:postgresql://localhost:5432/devsummit
+    user: devsummit
+    password: devsummit
+  datasource:
+    url: jdbc:postgresql://localhost:5432/devsummit
+    username: devsummit
+    password: devsummit
+
+client:
+  pet-name-generator:
+    base-url: http://localhost:8081

@@ -1,0 +1,25 @@
+services:
+  master-one-pet-data:
+    build:
+        context: .
+        dockerfile: ./master-one-pet-data/Dockerfile
+    ports:
+      - "8081:8081"
+
+  database:
+    image: postgres:18
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -d devsummit -U devsummit" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    environment:
+      POSTGRES_USER: devsummit
+      POSTGRES_PASSWORD: devsummit
+      POSTGRES_DB: devsummit
+    ports:
+      - "5432:5432"
+    command:
+      - "postgres"
+      - "-c"
+      - "wal_level=logical"
