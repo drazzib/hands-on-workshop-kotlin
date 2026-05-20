@@ -23,14 +23,14 @@ jobs:
     steps:
       - uses: actions/checkout@v6
 
+      - name: Install PNPM
+        uses: pnpm/action-setup@v6
+
       - name: Setup NodeJS Runtime
         uses: actions/setup-node@v6
         with:
           cache: "pnpm"
           node-version: "lts/*"
-
-      - name: Install PNPM
-        uses: pnpm/action-setup@v6
 
       - name: Install dependencies
         working-directory: ./slides
