@@ -22,23 +22,26 @@ jobs:
 
     steps:
       - uses: actions/checkout@v6
-        with:
-          submodules: true
 
-      - uses: actions/setup-node@v6
+      - name: Install PNPM
+        uses: pnpm/action-setup@v6
         with:
-          node-version: "lts/*"
+          package_json_file: slides/package.json
 
-      - name: Setup @antfu/ni
-        run: npm i -g @antfu/ni
+      - name: Setup NodeJS
+        uses: actions/setup-node@v6
+        with:
+          node-version-file: slides/.nvmrc
+          cache: pnpm
+          cache-dependency-path: slides/pnpm-lock.yaml
 
       - name: Install dependencies
         working-directory: ./slides
-        run: nci
+        run: pnpm install --frozen-lockfile
 
       - name: Build
         working-directory: ./slides
-        run: nr build --base /hands-on-workshop-kotlin/
+        run: pnpm build --base /hands-on-workshop-kotlin/
 
       - name: Setup Pages
         uses: actions/configure-pages@v6
