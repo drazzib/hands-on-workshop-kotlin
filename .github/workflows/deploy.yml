@@ -37,7 +37,7 @@ jobs:
 
       - name: Install dependencies
         working-directory: ./slides
-        run: pnpm install
+        run: pnpm ci
 
       - name: Build
         working-directory: ./slides
