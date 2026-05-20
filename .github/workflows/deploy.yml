@@ -38,7 +38,7 @@ jobs:
 
       - name: Build
         working-directory: ./slides
-        run: nr build --base /
+        run: nr build --base /hands-on-workshop-kotlin/
 
       - name: Setup Pages
         uses: actions/configure-pages@v6
