@@ -23,8 +23,8 @@ jobs:
           distribution: 'temurin'
 
       - name: Build
-        run: ./mvnw compile
+        run: ./mvnw --batch-mode compile
 
       - name: Tests
-        run: ./mvnw verify
+        run: ./mvnw --batch-mode verify
 
