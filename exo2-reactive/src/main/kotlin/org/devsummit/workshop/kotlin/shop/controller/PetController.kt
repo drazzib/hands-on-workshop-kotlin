@@ -2,10 +2,10 @@ package org.devsummit.workshop.kotlin.shop.controller
 
 import org.devsummit.workshop.kotlin.shop.controller.dto.NewPetDto
 import org.devsummit.workshop.kotlin.shop.controller.dto.PetDto
+import org.devsummit.workshop.kotlin.shop.controller.dto.toDto
 import org.devsummit.workshop.kotlin.shop.domain.NewPet
 import org.devsummit.workshop.kotlin.shop.domain.PetKind
 import org.devsummit.workshop.kotlin.shop.domain.PetName
-import org.devsummit.workshop.kotlin.shop.domain.toDto
 import org.devsummit.workshop.kotlin.shop.service.PetService
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*

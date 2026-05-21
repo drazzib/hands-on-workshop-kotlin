@@ -21,14 +21,6 @@ data class NewPet(
     val kind: PetKind,
 )
 
-fun Pet.toDto() = PetDto(
-    id = this.id.value,
-    name = this.name.value,
-    kind = this.kind.name,
-    price = this.price.value,
-    currency = this.currency.value,
-)
-
 data class PetPrice(val price: Price, val currency: Currency)
 
 @JvmInline
