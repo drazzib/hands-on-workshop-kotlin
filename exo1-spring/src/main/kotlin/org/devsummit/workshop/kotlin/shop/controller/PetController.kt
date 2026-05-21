@@ -15,8 +15,8 @@ class PetController(private val service: PetService) {
     fun listPets() = service.findAll()
 
     @PostMapping
-    fun createPet(@RequestBody pet: NewPetDto): ResponseEntity<Pet> {
+    fun createPet(@RequestBody pet: NewPetDto): ResponseEntity<PetDto> {
         val newPet = NewPet(pet.name, pet.kind)
-        return service.createPet(newPet).let { ResponseEntity.ok(it) }
+        return service.createPet(newPet).let { ResponseEntity.ok(it.asDto()) }
     }
 }

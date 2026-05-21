@@ -1,4 +1,4 @@
-# Exercise #1: Kotlin Basics
+# Exercise #1: Spring and Kotlin 
 
 ## Goal
 
@@ -53,7 +53,7 @@ public enum PetKind {
 
 ### Task
 
-- Convert this enum to Kotlin in `Pet.kt` (IntelliJ can do this automatically)
+- Convert this enum to Kotlin in `Pet.kt` (if you copy-paste the java, IntelliJ should do this automatically)
 - Use the enum in `Pet` and `PetDto` instead of `String`
 
 ## 1.2 Add an Extension Function
@@ -63,8 +63,10 @@ Kotlin extension function syntax:
 ```kotlin
 fun TheType.theFunction() = "something"
 ```
+### Task
 
-Example for this exercise:
+PetDto has leak into our domain Pet for the mapping. 
+Remove the function in `Pet` and add an extension function in `PetDto.kt` to convert `Pet` to `PetDto`:
 
 ```kotlin
 fun Pet.toDto() = PetDto(
@@ -78,9 +80,11 @@ fun Pet.toDto() = PetDto(
 
 ## 1.3 Use Constructor Injection
 
-`PetService` depends on `PetRepository` and `ExternalClient`.
+`PetService` already depends on `PetRepository`
 
 ### Task
+
+We will need to use `ExternalClient` in the next steps, so let's prepare for that by adding it:
 
 - Inject dependencies through the constructor
 - Use `private val` so injected dependencies are private class properties
@@ -132,6 +136,8 @@ value class FirstName(val value: String) {
 Use `init` to enforce domain validation rules.
 
 ### Task
+
+We have several primitive types in our model that can be replaced with value classes for better type safety and domain expressiveness.
 
 Replace primitive types with value classes:
 
