@@ -5,9 +5,12 @@ import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
 import org.springframework.web.client.RestClient
 import org.springframework.web.client.body
+import org.springframework.web.reactive.function.client.WebClient
+import org.springframework.web.reactive.function.client.awaitBody
+import org.springframework.web.reactive.function.client.bodyToMono
 
 @Service
-class ExternalClient(private val petNameWebClient: RestClient) {
+class ExternalClient(private val petNameWebClient: WebClient) {
     fun fetchRandomName(kind: PetKind): PetName = try {
         petNameWebClient
             .get()
@@ -15,10 +18,11 @@ class ExternalClient(private val petNameWebClient: RestClient) {
                     .queryParam("kind", kind).build()
             }
             .retrieve()
-            .onStatus({ t -> t.isError }) { _, res ->
-                WebClientApiErrorHelper.throwException(res)
+            .onStatus({ t -> t.isError }) { res ->
+                WebClientApiErrorHelper.createMonoError(res)
             }
-            .body<RemotePetNameDto>()
+            .bodyToMono<RemotePetNameDto>()
+            .block()
             ?.name?.let { PetName(it) } ?: throw PetNameUnhandledError(Exception("Empty name response"))
     } catch (e: HttpClientException) {
         when (e.statusCode) {
@@ -36,10 +40,11 @@ class ExternalClient(private val petNameWebClient: RestClient) {
                     .queryParam("kind", kind).build()
             }
             .retrieve()
-            .onStatus({ t -> t.isError }) { _, res ->
-                WebClientApiErrorHelper.throwException(res)
+            .onStatus({ t -> t.isError }) { res ->
+                WebClientApiErrorHelper.createMonoError(res)
             }
-            .body<RemotePetPriceDto>()
+            .bodyToMono<RemotePetPriceDto>()
+            .block()
             ?.let { PetPrice(Price(it.price), Currency(it.currency)) }
             ?: throw PriceV1UnhandledError(Exception("Empty price response"))
     } catch (e: Exception) {

@@ -1,17 +1,18 @@
 package org.devsummit.workshop.kotlin.shop.service
 
 import org.springframework.http.HttpStatusCode
-import org.springframework.http.client.ClientHttpResponse
+import org.springframework.web.reactive.function.client.ClientResponse
+import org.springframework.web.reactive.function.client.bodyToMono
+import reactor.core.publisher.Mono
 
 class WebClientApiErrorHelper {
     companion object {
-        fun throwException(res: ClientHttpResponse) {
-            val errorBody = res.body.bufferedReader().use { it.readText() }
-            if (errorBody.isEmpty()) {
-                throw HttpClientException(res.statusCode, "Unknown reason")
-            } else {
-                throw HttpClientException(res.statusCode, errorBody)
-            }
+        fun createMonoError(res: ClientResponse): Mono<Throwable> {
+            return res.bodyToMono<String>()
+                .switchIfEmpty(Mono.error(HttpClientException(res.statusCode(), "Unknown reason")) )
+                .flatMap { errorBody ->
+                    Mono.error(HttpClientException(res.statusCode(), errorBody))
+                }
         }
     }
 }
