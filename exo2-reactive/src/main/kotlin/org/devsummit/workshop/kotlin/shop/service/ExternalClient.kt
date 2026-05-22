@@ -3,10 +3,9 @@ package org.devsummit.workshop.kotlin.shop.service
 import org.devsummit.workshop.kotlin.shop.domain.*
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
-import org.springframework.web.client.RestClient
-import org.springframework.web.client.body
 import org.springframework.web.reactive.function.client.WebClient
 import org.springframework.web.reactive.function.client.awaitBodyOrNull
+import org.springframework.web.reactive.function.client.bodyToMono
 
 @Service
 class ExternalClient(private val petNameWebClient: WebClient) {
