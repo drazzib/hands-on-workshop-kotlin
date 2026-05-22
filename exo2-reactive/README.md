@@ -190,6 +190,18 @@ val result = try {
 }
 ```
 
+## 2.7 Final touch
+
+### Task
+
+You now have a fully reactive service. You can remove the webmvc dependency from `pom.xml`
+
+```xml
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-webmvc</artifactId>
+</dependency>
+```
 
 ## Next Step
 
