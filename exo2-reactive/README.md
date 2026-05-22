@@ -36,8 +36,8 @@ suspend fun mySuspendableFunction(): String {
 
 ### Task
 
-- Add `suspend` to relevant methods in `PetRepository` and `PetService`
-- For still-blocking calls, isolate them with `withContext(Dispatchers.IO) { ... }`
+- Add `suspend` to all methods in `PetController` and `PetService`
+- For still-blocking calls in `PetService`, isolate them with `withContext(Dispatchers.IO) { ... }`
 
 ## 2.2 Make `fetchRandomName` Non-Blocking
 
@@ -45,9 +45,19 @@ suspend fun mySuspendableFunction(): String {
 
 ### Task
 
-- Replace `.block()` with coroutine bridge methods such as `.awaitSingle()` or `.awaitSingleOrNull()`
+- Replace `bodyToMono<RemotePetNameDto>().block()` with coroutine bridge methods such as `.awaitBody<RemotePetNameDto>()` or `.awaitBodyOrNull<RemotePetNameDto>()`
 - Mark the method `suspend`
 - Remove the `Dispatchers.IO` wrapper for this method once fully non-blocking
+
+### Bonus
+
+If the type can be deduced, you can use the reified version without specifying the type parameter:
+
+```kotlin
+val dto: RemotePetNameDto = webClient.get()
+    /* ... */
+    .awaitBody()
+```
 
 ## 2.3 Make `fetchPetPrice` Non-Blocking
 
@@ -111,11 +121,11 @@ import org.springframework.data.relational.core.mapping.Table
 @Table("pets")
 @Persistent
 data class Pet(
-    @Id val id: Long? = null,
-    val name: String,
+    @Id val id: PetId = PetId.NULL,
+    val name: PetName,
     val kind: PetKind,
-    val price: Double,
-    val currency: String,
+    val price: Price,
+    val currency: Currency,
 )
 ```
 
@@ -133,14 +143,11 @@ with R2DBC URL:
     url: r2dbc:postgresql://localhost:5432/devsummit
 ```
 
+- In `PetService`, remove all the `withContext(Dispatchers.IO) { ... }` wrappers around repository calls, as R2DBC is non-blocking and does not require an IO dispatcher.
+
 ## 2.5 Run External Calls in Parallel
 
 Name generation and price lookup are independent and can run concurrently.
-
-### Task
-
-- Run both operations as separate async tasks
-- Use `coroutineScope` so both child coroutines are structured and awaited
 
 ### Hint
 
@@ -149,12 +156,17 @@ Name generation and price lookup are independent and can run concurrently.
 
 ```kotlin
 fun startWork(): TaskForToday = coroutineScope {
-    launch { sitAtYourDesk() }
     val deferredIdea = async { thinkToAnIdea() }
+    launch { sitAtYourDesk() }
     val badIdea = deferredIdea.await()
     TaskForToday(badIdea)
 }
 ```
+
+### Task
+
+- In `PetService` wrap both calls to externalClient as separate async tasks
+- Use `coroutineScope` so both child coroutines are structured and awaited
 
 ## 2.6 Add Fallback to `fetchPetPriceV2`
 
@@ -162,8 +174,7 @@ fun startWork(): TaskForToday = coroutineScope {
 
 ### Task
 
-- Try price V2 first
-- On error, fallback to V1
+- Inside the async, try price V2 first, on error, fallback to V1
 
 ### Hint
 
@@ -179,6 +190,18 @@ val result = try {
 }
 ```
 
+## 2.7 Final touch
+
+### Task
+
+You now have a fully reactive service. You can remove the webmvc dependency from `pom.xml`
+
+```xml
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-webmvc</artifactId>
+</dependency>
+```
 
 ## Next Step
 

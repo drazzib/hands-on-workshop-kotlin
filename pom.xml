@@ -19,6 +19,7 @@
 		<kotlin.version>2.2.21</kotlin.version>
 
         <assertk.version>0.28.1</assertk.version>
+        <kotlin-logging.version>7.0.14</kotlin-logging.version>
     </properties>
     <modules>
         <module>master-one-pet-data</module>
@@ -52,6 +53,11 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-configuration-processor</artifactId>
             <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>io.github.oshai</groupId>
+            <artifactId>kotlin-logging-jvm</artifactId>
+            <version>${kotlin-logging.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>

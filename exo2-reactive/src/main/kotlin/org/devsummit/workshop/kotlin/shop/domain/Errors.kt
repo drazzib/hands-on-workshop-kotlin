@@ -8,3 +8,7 @@ class PriceV1UnhandledError(val exception: Exception) : Error(exception.message 
 sealed interface PetNameError
 class PetNameTimeout(kind: PetKind) : Error("Timeout when calling for $kind"), PetNameError
 class PetNameUnhandledError(val exception: Exception) : Error(exception.message ?: ""), PetNameError
+
+sealed interface PriceV2Error
+class PriceV2NotFoundError(message: String) : Error(message), PriceV2Error
+class PriceV2UnhandledError(val exception: Exception) : Error(exception.message ?: ""), PriceV2Error
