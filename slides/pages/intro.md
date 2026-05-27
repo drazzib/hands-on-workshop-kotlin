@@ -8,7 +8,8 @@ Please clone the repository:
 ```
 git clone https://github.com/drazzib/hands-on-workshop-kotlin
 cd hands-on-workshop-kotlin/
-docker compose pull && ./mvnw compile
+docker compose pull && docker compose build
+./mvnw compile
 ```
 
 ![github-repo-qrcode.png](/github-repo-qrcode.png)
