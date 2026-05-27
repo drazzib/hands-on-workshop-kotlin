@@ -3,6 +3,8 @@ package org.devsummit.workshop.kotlin.exo0
 import assertk.assertThat
 import assertk.assertions.contains
 import assertk.assertions.isEqualTo
+import assertk.assertions.isNotEqualTo
+import org.devsummit.workshop.kotlin.exo0.solution.Pet
 import org.junit.jupiter.api.Test
 
 /**
@@ -50,11 +52,14 @@ class PlaygroundTest {
 //    fun `step 9 - data class`() {
 //        val pet1 = Pet("Luna", 3)
 //        val pet2 = Pet("Luna", 3)
+//        val pet3 = pet1.copy(age = 5)
 //        // data class → structural equality (without `data` this test fails)
 //        assertThat(pet1).isEqualTo(pet2)
+//        assertThat(pet1).isNotEqualTo(pet3)
 //        // data class → meaningful toString containing field values
-//        assertThat(pet1.toString()).contains("Luna")
-//        assertThat(pet1.toString()).contains("3")
+//        assertThat(pet1.name).equals("Luna")
+//        assertThat(pet1.age).equals(3)
+//        assertThat(pet3.age).equals("3")
 //    }
 
     // ✂️ Uncomment when you've completed Step 10 — extension functions:
