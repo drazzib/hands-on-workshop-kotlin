@@ -61,12 +61,17 @@ suspend fun fetchPetPrice(kind: PetKind): Either<PriceV1UnhandledError, PetPrice
 suspend fun fetchPetPriceV2(kind: PetKind): Either<PriceV2Error, PetPrice?> = try {
 ```
 
+Within the `try` block, wrap successful values with `.right()` and caught exceptions with `.left()`.
+
+**The `either {}` DSL**: A computation expression that chains `Either` operations. Inside, call `.bind()` on an `Either` to unwrap its `Right` value; if any operation returns `Left`, it short-circuits and returns that error immediately. This keeps error propagation clean without nested `when` blocks.
+
 ### 2) Update `PetService` Flow
+
 
 Align generated name type with `Either`:
 
 ```kotlin
-val generatedNameDeferred = async {
+val petName = async {
     newPet.name?.right() ?: externalClient.fetchRandomName(newPet.kind)
 }
 ```
@@ -74,29 +79,25 @@ val generatedNameDeferred = async {
 Add fallback for price with `.handleErrorWith` (fallback only on `Left`):
 
 ```kotlin
-val priceDeferred = async {
-    externalClient.fetchPetPriceV2(newPet.kind)
-        .handleErrorWith {
-            externalClient.fetchPetPrice(newPet.kind)
-        }
-}
+return externalClient.fetchPetPriceV2(kind)
+    .handleErrorWith {
+        externalClient.fetchPetPrice(kind)
+    }
 ```
+
+Wrap the coroutineScope of the createPet function in an `either {}` block to propagate errors from async operations.
 
 ### 3) Use Arrow `either {}` DSL
 
 Use `bind()` to unwrap `Right` values and short-circuit on `Left`:
 
 ```kotlin
-either {
-    val name: PetName = generatedNameDeferred.await().bind()
-    val price = priceDeferred.await().bind()
-    val finalPet = Pet(
-        name = name,
-        kind = newPet.kind,
-        price = price.price,
-        currency = price.currency,
-    )
-    repository.save(finalPet)
+    suspend fun createPet(newPet: NewPet): Either<Any, Pet> = either {
+    coroutineScope {
+        val petName = async { newPet.name?.right() ?: externalClient.fetchRandomName(newPet.kind) }
+        val petPrice = async { fetchPetPrice(newPet.kind) }.await().bind()
+        val pet = Pet(name = petName.await().bind() /* ... */
+    }
 }
 ```
 
@@ -104,12 +105,23 @@ either {
 
 Group allowed error types behind one parent interface so returnable errors are compile-time constrained.
 
+As you can see we can only have PriceV1Error and PetNameError as possible errors. 
+The PriceV2Error is internally handled.
+
+So we can create a sealed interface to represent this family of errors:
+
 ```kotlin
 sealed class Error(val message: String)
 sealed interface PetCreationError
 
 sealed interface PriceV1Error : PetCreationError
 sealed interface PetNameError : PetCreationError
+```
+
+Now we can return this interface
+
+```kotlin
+suspend fun createPet(newPet: NewPet): Either<PetCreationError, Pet> = either {
 ```
 
 ## Controller Error Mapping
