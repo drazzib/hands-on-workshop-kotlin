@@ -56,7 +56,7 @@ class ExternalClient(private val petNameWebClient: WebClient) {
                 WebClientApiErrorHelper.createMonoError(it)
             }
             .awaitBodyOrNull<RemotePetPriceDto>()
-            ?.let { PetPrice(Price(it.price), Currency(it.currency)) } ?: throw PriceV1UnhandledError(Exception("Empty price response"))
+            ?.let { PetPrice(Price(it.price), Currency(it.currency)) } ?: throw PriceV2UnhandledError(Exception("Empty price response"))
     } catch (e: HttpClientException) {
         when (e.statusCode) {
             HttpStatus.NOT_FOUND -> throw PriceV2NotFoundError(e.message)
