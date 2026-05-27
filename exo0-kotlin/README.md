@@ -54,9 +54,9 @@ fun main() {
 }
 ```
 
-> 🤩 **Why it's cool?** In Java you need a class with a `public static void main(String[] args)` just to run code. In Kotlin, `main` is a plain top-level function — no wrapper class, no boilerplate. No more utility classes!
-
 ✏️ **Task:** Write a `fun main()` in `Playground.kt` that prints `"Hello, Kotlin!"`.
+
+> 🤩 **Why it's cool?** In Java you need a class with a `public static void main(String[] args)` just to run code. In Kotlin, `main` is a plain top-level function — no wrapper class, no boilerplate. No more utility classes!
 
 ---
 
@@ -136,9 +136,9 @@ fun format(s: String): String {
 println(format("DevSummit"))   // → Hello DEVSUMMIT
 ```
 
-> 🤩 **Why it's cool?** Less boilerplate to update during refactoring — but you still get a **compilation error** if you make a breaking change to the return type. Best of both worlds.
-
 > ✂️ Uncomment the **Step 4** test in `PlaygroundTest.kt` to validate.
+
+> 🤩 **Why it's cool?** Less boilerplate to update during refactoring — but you still get a **compilation error** if you make a breaking change to the return type. Best of both worlds.
 
 ---
 
@@ -194,13 +194,13 @@ fun format(s: String?): String {
 }
 ```
 
+> ✂️ Uncomment the **Step 6** test in `PlaygroundTest.kt` to validate.
+
 > 💡 **Smart cast** — did you notice that inside the `else` branch, `s` is no longer `String?`?
 > After the `if (s == null)` check the compiler **knows** `s` cannot be `null` in the `else`,
 > so it automatically treats it as `String`. No cast needed — this is called a **smart cast**.
 
 > 🤩 **Why it's cool?** Using `if` as an expression encourages a **single exit point** — the whole function becomes one expression. Smart cast means you don't need to rename or re-declare a variable just to use it as a non-nullable type.
-
-> ✂️ Uncomment the **Step 6** test in `PlaygroundTest.kt` to validate.
 
 ---
 
@@ -209,10 +209,10 @@ fun format(s: String?): String {
 `when` replaces `switch` and can return a value.
 
 ```kotlin
-val sound = when (species) {
-    "cat"  -> "meow"
-    "dog"  -> "woof"
-    else   -> "..."
+val sound = when (wind) {
+    "Zephyr"  -> "shhh-wshhh"
+    "Tornado"  -> "SCREEECH-CHUUUGGG-RUMMMBLE"
+    else   -> "what?"
 }
 ```
 
@@ -223,9 +223,9 @@ val sound = when (species) {
 fun describeSpecies(species: String): String = when (species) { ... }
 ```
 
-> 🤩 **Why it's cool?** Java finally got switch expressions in Java 14 — Kotlin has had `when` from day one, and it's more powerful: no fall-through, works as an expression everywhere, and exhaustiveness checking on sealed types.
-
 > ✂️ Uncomment the **Step 7** test in `PlaygroundTest.kt` to validate.
+
+> 🤩 **Why it's cool?** Java finally got switch expressions in Java 14 — Kotlin has had `when` from day one, and it's more powerful: no fall-through, works as an expression everywhere, and exhaustiveness checking on sealed types.
 
 ---
 
@@ -235,16 +235,17 @@ A Kotlin class declares its properties directly in the **primary constructor**.
 No need for a separate field declaration and assignment.
 
 ```kotlin
-class Animal(val name: String, val species: String) {
-    fun speak(): String = describeSpecies(species)
+class Pony(val name: String, val kind: String) {
+    fun fly(): Boolean = if (kind == "pegasus") true else false
 }
 ```
 
-✏️ **Task:** Declare `Animal` with a `speak()` method that returns the species sound.
+✏️ **Task:** Declare `Animal` with name and species as property. Add a `speak()` method that returns the species sound.
+
+> ✂️ Uncomment the **Step 8** test in `PlaygroundTest.kt` to
+validate.
 
 > 🤩 **Why it's cool?** Less boilerplate — constructor parameters double as properties. The syntax reads like a function call, making the class declaration concise and intuitive.
-
-> ✂️ Uncomment the **Step 8** test in `PlaygroundTest.kt` to validate.
 
 ---
 
@@ -280,9 +281,9 @@ val older = p1.copy(age = 4)   // creates Pet("Luna", 4)
 
 ✏️ **Task:** Declare `data class Pet(val name: String, val age: Int)`.
 
-> 🤩 **Why it's cool?** Data classes are like Java records, with `copy()` and named parameters giving you the right tooling to work with immutable objects. Structural equality and readable `toString()` come for free.
-
 > ✂️ Uncomment the **Step 9** test in `PlaygroundTest.kt` to validate.
+
+> 🤩 **Why it's cool?** Data classes are like Java records, with `copy()` and named parameters giving you the right tooling to work with immutable objects. Structural equality and readable `toString()` come for free.
 
 ---
 
@@ -291,25 +292,23 @@ val older = p1.copy(age = 4)   // creates Pet("Luna", 4)
 Add new functions to **existing types** without modifying their source or using inheritance.
 
 ```kotlin
-fun String.shout(): String = uppercase() + "!"
+fun Int.double(): Int = this * 2
 
-fun Animal.describe(): String = "$species named $name"
+fun Any.asString(): String = this.toString().uppercase()
 
 // usage
-"kotlin".shout()                   // → "KOTLIN!"
-Animal("Rex", "dog").describe()    // → "dog named Rex"
 ```
 
 ✏️ **Task:** Implement both extension functions.
 
 ```kotlin
-fun String.shout(): String = ...
-fun Animal.describe(): String = ...
+fun String.shout(): String = /** return the string as uppercase with `!` at the end */
+fun Animal.describe(): String = /** return a string with `species named name` like "dog named Rex" */
 ```
 
-> 🤩 **Why it's cool?** You can add behavior to a type without touching its source code or using inheritance. Perfect for mapping: instead of `asDto(domain: MyDomainObject)` (right-to-left reading), write `fun MyDomainObject.asDto()` and call `domain.asDto()` — natural left-to-right reading, just like a regular method.
-
 > ✂️ Uncomment the **Step 10** test in `PlaygroundTest.kt` to validate.
+
+> 🤩 **Why it's cool?** You can add behavior to a type without touching its source code or using inheritance. Perfect for mapping: instead of `asDto(domain: MyDomainObject)` (right-to-left reading), write `fun MyDomainObject.asDto()` and call `domain.asDto()` — natural left-to-right reading, just like a regular method.
 
 ---
 
