@@ -15,9 +15,11 @@ import org.springframework.web.bind.annotation.*
 class PetController(private val service: PetService) {
 
     @GetMapping
+    // EXO 2.1: add suspend
     fun listPets() = service.findAll().map { it.toDto() }
 
     @PostMapping
+    // EXO 2.1: add suspend here as well
     fun createPet(@RequestBody pet: NewPetDto): ResponseEntity<PetDto> {
         val newPet = NewPet(pet.name?.let { PetName(it) }, PetKind.valueOf(pet.kind))
         return service.createPet(newPet).let { ResponseEntity.ok(it.toDto()) }

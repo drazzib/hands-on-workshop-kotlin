@@ -9,6 +9,7 @@ import org.springframework.web.reactive.function.client.bodyToMono
 
 @Service
 class ExternalClient(private val petNameWebClient: WebClient) {
+    // EXO 2.2: add suspend and replace .bodyToMono().block() with `.awaitBodyOrNull
     fun fetchRandomName(kind: PetKind): PetName = try {
         petNameWebClient
             .get()
@@ -19,6 +20,7 @@ class ExternalClient(private val petNameWebClient: WebClient) {
             .onStatus({ t -> t.isError }) { res ->
                 WebClientApiErrorHelper.createMonoError(res)
             }
+            // EXO 2.2: replace with `.awaitBodyOrNull
             .bodyToMono<RemotePetNameDto>()
             .block()
             ?.name?.let { PetName(it) } ?: throw PetNameUnhandledError(Exception("Empty name response"))
@@ -31,6 +33,7 @@ class ExternalClient(private val petNameWebClient: WebClient) {
         throw PetNameUnhandledError(e)
     }
 
+    // EXO 2.3: add suspend replace .bodyToMono.block() .awaitBodyOrNull
     fun fetchPetPrice(kind: PetKind): PetPrice = try {
         petNameWebClient
             .get()
@@ -41,6 +44,7 @@ class ExternalClient(private val petNameWebClient: WebClient) {
             .onStatus({ t -> t.isError }) { res ->
                 WebClientApiErrorHelper.createMonoError(res)
             }
+            // EXO 2.3: replace with .awaitBodyOrNull
             .bodyToMono<RemotePetPriceDto>()
             .block()
             ?.let { PetPrice(Price(it.price), Currency(it.currency)) }
@@ -48,6 +52,8 @@ class ExternalClient(private val petNameWebClient: WebClient) {
     } catch (e: Exception) {
         throw PriceV1UnhandledError(e)
     }
+
+    // EXO 2.6: Use V2 method inside PetService
     suspend fun fetchPetPriceV2(kind: PetKind): PetPrice = try {
         petNameWebClient
             .get()

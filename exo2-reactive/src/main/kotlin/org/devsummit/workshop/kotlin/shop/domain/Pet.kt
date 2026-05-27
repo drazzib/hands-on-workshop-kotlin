@@ -3,6 +3,7 @@ package org.devsummit.workshop.kotlin.shop.domain
 import jakarta.persistence.*
 import org.devsummit.workshop.kotlin.shop.controller.dto.PetDto
 
+// EXO 2.4: swap Jakarta Persistence annotations for Spring Data relational ones
 @Table(name = "pets")
 @Entity
 data class Pet(
