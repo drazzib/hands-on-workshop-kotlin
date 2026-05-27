@@ -52,17 +52,13 @@ src: ./pages/intro.md
 ---
 
 ---
+src: ./pages/conclusion.md
+---
+
+---
 src: ./pages/base.md
 ---
 
 ---
 src: ./pages/spring.md
----
-
----
-src: ./pages/dkt.md
----
-
----
-src: ./pages/conclusion.md
 ---
