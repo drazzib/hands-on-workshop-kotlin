@@ -46,14 +46,7 @@ class Animal(val name: String, val species: String) {
 
 data class Pet(val name: String, val age: Int)
 
-// ─── Step 11 — Local function ────────────────────────────────────────────────
-
-fun greetAll(names: List<String>): List<String> {
-    fun greet(name: String) = "Hello, $name!"
-    return names.map { greet(it) }
-}
-
-// ─── Step 12 — Extension functions ──────────────────────────────────────────
+// ─── Step 11 — Extension functions ──────────────────────────────────────────
 
 fun String.shout(): String = uppercase() + "!"
 
