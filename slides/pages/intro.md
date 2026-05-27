@@ -11,8 +11,6 @@ cd hands-on-workshop-kotlin/
 docker compose pull && ./mvnw compile
 ```
 
-Or scan the QR code:
-
 ![github-repo-qrcode.png](/github-repo-qrcode.png)
 
 ---
