@@ -10,6 +10,7 @@ import org.springframework.web.client.body
 
 @Service
 class ExternalClient(private val petNameWebClient: RestClient) {
+    // EXO 1.6: evolve parameter/return types to value classes after introducing them.
     fun fetchRandomName(kind: String): String = try {
         petNameWebClient
             .get()
@@ -31,6 +32,7 @@ class ExternalClient(private val petNameWebClient: RestClient) {
         throw PetNameUnhandledError(e)
     }
 
+    // EXO 1.1 + 1.5: kind should become PetKind and is used to fetch remote pricing.
     fun fetchPetPrice(kind: String): RemotePetPriceDto = try {
         petNameWebClient
             .get()

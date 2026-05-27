@@ -16,6 +16,7 @@ class PetController(private val service: PetService) {
 
     @PostMapping
     fun createPet(@RequestBody pet: NewPetDto): ResponseEntity<PetDto> {
+        // EXO 1.1 / 1.4 / 1.6: keep DTO -> domain mapping in sync with enum, nullable name, and value classes.
         val newPet = NewPet(pet.name, pet.kind)
         return service.createPet(newPet).let { ResponseEntity.ok(it.asDto()) }
     }
