@@ -11,7 +11,7 @@
 
     <artifactId>exo3-advanced</artifactId>
     <properties>
-        <arrow.version>2.2.1.1</arrow.version>
+        <arrow.version>2.2.2.1</arrow.version>
     </properties>
     <dependencies>
         <dependency>
